@@ -1,0 +1,721 @@
+/* Markdown Viewer Styles - Warm color palette */
+
+/* Light theme - warm off-white */
+:root {
+  --color-fg: #37352f;
+  --color-fg-emphasis: #37352f;
+  --color-bg: #f9f8f6;
+  --color-border: #e4e3e0;
+  --color-link: #2e6fba;
+  --color-code-bg: #f1f0ed;
+  --color-code-fg: #37352f;
+  --color-blockquote-border: #d9d8d5;
+  --color-blockquote-text: #6b6b6b;
+  --color-heading-border: #e4e3e0;
+
+  /* Flowchart CSS variables - light theme */
+  --flowchart-node-fill: #fff;
+  --flowchart-node-stroke: #333;
+  --flowchart-node-label: #333;
+  --flowchart-edge-stroke: #666;
+  --flowchart-edge-arrow: #666;
+  --flowchart-edge-label: #666;
+  --flowchart-edge-label-bg: #fff;
+  --flowchart-subgraph-fill: #f5f5f5;
+  --flowchart-subgraph-stroke: #999;
+  --flowchart-subgraph-label: #666;
+}
+
+/* Dark theme - warm soft colors (auto) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --color-fg: #b3b3b3;
+    --color-fg-emphasis: #e0e0e0;
+    --color-bg: #232323;
+    --color-border: #3d3d3d;
+    --color-link: #6ba3d6;
+    --color-code-bg: #2d2d2d;
+    --color-code-fg: #e0e0e0;
+    --color-blockquote-border: #4a4a4a;
+    --color-blockquote-text: #808080;
+    --color-heading-border: #3d3d3d;
+
+    /* Flowchart CSS variables - dark theme */
+    --flowchart-node-fill: #2d2d2d;
+    --flowchart-node-stroke: #888;
+    --flowchart-node-label: #e0e0e0;
+    --flowchart-edge-stroke: #888;
+    --flowchart-edge-arrow: #888;
+    --flowchart-edge-label: #aaa;
+    --flowchart-edge-label-bg: #1e1e1e;
+    --flowchart-subgraph-fill: #252525;
+    --flowchart-subgraph-stroke: #666;
+    --flowchart-subgraph-label: #aaa;
+  }
+}
+
+/* Dark theme - manual override */
+:root[data-theme="dark"] {
+  --color-fg: #b3b3b3;
+  --color-fg-emphasis: #e0e0e0;
+  --color-bg: #232323;
+  --color-border: #3d3d3d;
+  --color-link: #6ba3d6;
+  --color-code-bg: #2d2d2d;
+  --color-code-fg: #e0e0e0;
+  --color-blockquote-border: #4a4a4a;
+  --color-blockquote-text: #808080;
+  --color-heading-border: #3d3d3d;
+
+  /* Flowchart CSS variables - dark theme */
+  --flowchart-node-fill: #2d2d2d;
+  --flowchart-node-stroke: #888;
+  --flowchart-node-label: #e0e0e0;
+  --flowchart-edge-stroke: #888;
+  --flowchart-edge-arrow: #888;
+  --flowchart-edge-label: #aaa;
+  --flowchart-edge-label-bg: #1e1e1e;
+  --flowchart-subgraph-fill: #252525;
+  --flowchart-subgraph-stroke: #666;
+  --flowchart-subgraph-label: #aaa;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-fg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.3;
+  transition: opacity 0.2s;
+  z-index: 1000;
+  padding: 0;
+}
+
+.theme-toggle:hover {
+  opacity: 0.8;
+}
+
+.theme-toggle:active {
+  opacity: 1;
+}
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--color-fg);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.theme-toggle .icon-sun,
+.theme-toggle .icon-moon {
+  display: none;
+}
+
+/* Show sun in dark mode (click to go light) */
+:root[data-theme="dark"] .theme-toggle .icon-sun {
+  display: block;
+}
+:root[data-theme="dark"] .theme-toggle .icon-moon {
+  display: none;
+}
+
+/* Show moon in light mode (click to go dark) */
+:root[data-theme="light"] .theme-toggle .icon-sun {
+  display: none;
+}
+:root[data-theme="light"] .theme-toggle .icon-moon {
+  display: block;
+}
+
+/* Auto mode - show based on system preference */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .theme-toggle .icon-sun {
+    display: block;
+  }
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .theme-toggle .icon-moon {
+    display: block;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.markdown-viewer {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.markdown-body {
+  word-wrap: break-word;
+}
+
+/* Headings */
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--color-fg-emphasis);
+}
+
+.markdown-body h1 {
+  font-size: 2em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--color-heading-border);
+}
+
+.markdown-body h2 {
+  font-size: 1.5em;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--color-heading-border);
+}
+
+.markdown-body h3 {
+  font-size: 1.25em;
+}
+
+.markdown-body h4 {
+  font-size: 1em;
+}
+
+.markdown-body h5 {
+  font-size: 0.875em;
+}
+
+.markdown-body h6 {
+  font-size: 0.85em;
+  color: var(--color-blockquote-text);
+}
+
+/* Paragraphs and text */
+.markdown-body p {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.markdown-body a {
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+.markdown-body a:hover {
+  text-decoration: underline;
+}
+
+.markdown-body strong {
+  font-weight: 600;
+}
+
+/* Lists */
+.markdown-body ul,
+.markdown-body ol {
+  margin-top: 0;
+  margin-bottom: 16px;
+  padding-left: 2em;
+}
+
+.markdown-body li {
+  margin-top: 4px;
+}
+
+.markdown-body li + li {
+  margin-top: 4px;
+}
+
+.markdown-body li > p {
+  margin-top: 16px;
+}
+
+/* Code */
+.markdown-body code {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: var(--color-code-bg);
+  color: var(--color-code-fg);
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+.markdown-body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: var(--color-code-bg);
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.markdown-body pre code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+/* Blockquotes */
+.markdown-body blockquote {
+  margin: 0 0 16px 0;
+  padding: 0 1em;
+  color: var(--color-blockquote-text);
+  border-left: 4px solid var(--color-blockquote-border);
+}
+
+.markdown-body blockquote > :first-child {
+  margin-top: 0;
+}
+
+.markdown-body blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+/* Horizontal rules */
+.markdown-body hr {
+  height: 2px;
+  padding: 0;
+  margin: 48px 0;
+  background-color: var(--color-border);
+  border: 0;
+}
+
+/* Tables */
+.markdown-body table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+  width: 100%;
+  overflow: auto;
+}
+
+.markdown-body th,
+.markdown-body td {
+  padding: 6px 13px;
+  border: 1px solid var(--color-border);
+}
+
+.markdown-body th {
+  font-weight: 600;
+  background-color: var(--color-code-bg);
+}
+
+.markdown-body tr:nth-child(2n) {
+  background-color: var(--color-code-bg);
+}
+
+/* Images */
+.markdown-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+/* Task lists */
+.markdown-body input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+/* Syntax highlighting - Light theme */
+.hljs {
+  color: var(--color-code-fg);
+  background: var(--color-code-bg);
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: #6a737d;
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-addition {
+  color: #d73a49;
+}
+
+.hljs-string,
+.hljs-meta .hljs-string,
+.hljs-regexp,
+.hljs-attribute {
+  color: #032f62;
+}
+
+.hljs-number,
+.hljs-literal,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag .hljs-attr {
+  color: #005cc5;
+}
+
+.hljs-built_in,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-link {
+  color: #e36209;
+}
+
+.hljs-type,
+.hljs-class .hljs-title,
+.hljs-title.class_ {
+  color: #6f42c1;
+}
+
+.hljs-function .hljs-title,
+.hljs-title.function_ {
+  color: #6f42c1;
+}
+
+.hljs-name,
+.hljs-section,
+.hljs-selector-id,
+.hljs-selector-class {
+  color: #22863a;
+}
+
+.hljs-meta,
+.hljs-meta .hljs-keyword {
+  color: #005cc5;
+}
+
+.hljs-deletion {
+  color: #b31d28;
+  background-color: #ffeef0;
+}
+
+.hljs-addition {
+  color: #22863a;
+  background-color: #f0fff4;
+}
+
+/* Syntax highlighting - Dark theme (auto) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .hljs-comment,
+  :root:not([data-theme]) .hljs-quote {
+    color: #8b949e;
+  }
+
+  :root:not([data-theme]) .hljs-keyword,
+  :root:not([data-theme]) .hljs-selector-tag {
+    color: #ff7b72;
+  }
+
+  :root:not([data-theme]) .hljs-string,
+  :root:not([data-theme]) .hljs-meta .hljs-string,
+  :root:not([data-theme]) .hljs-regexp,
+  :root:not([data-theme]) .hljs-attribute {
+    color: #a5d6ff;
+  }
+
+  :root:not([data-theme]) .hljs-number,
+  :root:not([data-theme]) .hljs-literal,
+  :root:not([data-theme]) .hljs-variable,
+  :root:not([data-theme]) .hljs-template-variable,
+  :root:not([data-theme]) .hljs-tag .hljs-attr {
+    color: #79c0ff;
+  }
+
+  :root:not([data-theme]) .hljs-built_in,
+  :root:not([data-theme]) .hljs-symbol,
+  :root:not([data-theme]) .hljs-bullet,
+  :root:not([data-theme]) .hljs-link {
+    color: #ffa657;
+  }
+
+  :root:not([data-theme]) .hljs-type,
+  :root:not([data-theme]) .hljs-class .hljs-title,
+  :root:not([data-theme]) .hljs-title.class_ {
+    color: #d2a8ff;
+  }
+
+  :root:not([data-theme]) .hljs-function .hljs-title,
+  :root:not([data-theme]) .hljs-title.function_ {
+    color: #d2a8ff;
+  }
+
+  :root:not([data-theme]) .hljs-name,
+  :root:not([data-theme]) .hljs-section,
+  :root:not([data-theme]) .hljs-selector-id,
+  :root:not([data-theme]) .hljs-selector-class {
+    color: #7ee787;
+  }
+
+  :root:not([data-theme]) .hljs-meta,
+  :root:not([data-theme]) .hljs-meta .hljs-keyword {
+    color: #79c0ff;
+  }
+
+  :root:not([data-theme]) .hljs-deletion {
+    color: #ffdcd7;
+    background-color: #67060c;
+  }
+
+  :root:not([data-theme]) .hljs-addition {
+    color: #aff5b4;
+    background-color: #033a16;
+  }
+}
+
+/* Syntax highlighting - Dark theme (manual override) */
+:root[data-theme="dark"] .hljs-comment,
+:root[data-theme="dark"] .hljs-quote {
+  color: #8b949e;
+}
+
+:root[data-theme="dark"] .hljs-keyword,
+:root[data-theme="dark"] .hljs-selector-tag {
+  color: #ff7b72;
+}
+
+:root[data-theme="dark"] .hljs-string,
+:root[data-theme="dark"] .hljs-meta .hljs-string,
+:root[data-theme="dark"] .hljs-regexp,
+:root[data-theme="dark"] .hljs-attribute {
+  color: #a5d6ff;
+}
+
+:root[data-theme="dark"] .hljs-number,
+:root[data-theme="dark"] .hljs-literal,
+:root[data-theme="dark"] .hljs-variable,
+:root[data-theme="dark"] .hljs-template-variable,
+:root[data-theme="dark"] .hljs-tag .hljs-attr {
+  color: #79c0ff;
+}
+
+:root[data-theme="dark"] .hljs-built_in,
+:root[data-theme="dark"] .hljs-symbol,
+:root[data-theme="dark"] .hljs-bullet,
+:root[data-theme="dark"] .hljs-link {
+  color: #ffa657;
+}
+
+:root[data-theme="dark"] .hljs-type,
+:root[data-theme="dark"] .hljs-class .hljs-title,
+:root[data-theme="dark"] .hljs-title.class_ {
+  color: #d2a8ff;
+}
+
+:root[data-theme="dark"] .hljs-function .hljs-title,
+:root[data-theme="dark"] .hljs-title.function_ {
+  color: #d2a8ff;
+}
+
+:root[data-theme="dark"] .hljs-name,
+:root[data-theme="dark"] .hljs-section,
+:root[data-theme="dark"] .hljs-selector-id,
+:root[data-theme="dark"] .hljs-selector-class {
+  color: #7ee787;
+}
+
+:root[data-theme="dark"] .hljs-meta,
+:root[data-theme="dark"] .hljs-meta .hljs-keyword {
+  color: #79c0ff;
+}
+
+:root[data-theme="dark"] .hljs-deletion {
+  color: #ffdcd7;
+  background-color: #67060c;
+}
+
+:root[data-theme="dark"] .hljs-addition {
+  color: #aff5b4;
+  background-color: #033a16;
+}
+
+/* Mermaid diagrams */
+.mermaid-container {
+  margin: 16px 0;
+  padding: 16px;
+  background-color: var(--color-code-bg);
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.mermaid-container.mermaid-rendered {
+  background-color: transparent;
+  padding: 8px 0;
+}
+
+.mermaid-container svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}
+
+.mermaid-unsupported,
+.mermaid-error {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.mermaid-error::before {
+  content: "Failed to render diagram";
+  display: block;
+  color: #d73a49;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+:root[data-theme="dark"] .mermaid-error::before {
+  color: #ff7b72;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .mermaid-error::before {
+    color: #ff7b72;
+  }
+}
+
+/* Tree structure */
+.tree-container {
+  margin: 16px 0;
+  padding: 16px;
+  background-color: var(--color-code-bg);
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.tree-container-raw {
+  margin: 16px 0;
+  padding: 16px;
+  background-color: var(--color-code-bg);
+  border-radius: 6px;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.markdown-body .tree-table {
+  border-collapse: collapse;
+  font-size: 14px;
+  line-height: 1;
+  margin-bottom: 0;
+}
+
+.tree-table td {
+  padding: 0;
+  border: none;
+  vertical-align: middle;
+  height: 28px;
+}
+
+.tree-structure {
+  white-space: nowrap;
+  color: var(--color-fg);
+  display: flex;
+  align-items: center;
+}
+
+.tree-indent {
+  display: inline-block;
+  width: 24px;
+  height: 28px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Vertical line running through the cell */
+.tree-vline::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--color-blockquote-border);
+}
+
+/* Branch: vertical line with horizontal branch to the right */
+.tree-branch::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--color-blockquote-border);
+}
+
+.tree-branch::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  width: 12px;
+  height: 2px;
+  background-color: var(--color-blockquote-border);
+}
+
+/* Corner: vertical line from top to middle, then horizontal to right */
+.tree-corner::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 0;
+  height: calc(50% + 1px);
+  width: 2px;
+  background-color: var(--color-blockquote-border);
+}
+
+.tree-corner::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  width: 12px;
+  height: 2px;
+  background-color: var(--color-blockquote-border);
+}
+
+.tree-name {
+  padding-left: 6px;
+}
+
+.tree-name strong {
+  color: var(--color-fg-emphasis);
+}
+
+.tree-comment-cell {
+  padding-left: 24px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.tree-comment {
+  color: var(--color-blockquote-text);
+  font-style: italic;
+}
