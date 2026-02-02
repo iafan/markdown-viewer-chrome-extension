@@ -709,15 +709,14 @@ html, body {
   color: var(--color-fg-emphasis);
 }
 
-.tree-comment-cell {
-  padding-left: 24px;
-  white-space: nowrap;
-  vertical-align: middle;
+.tree-table td.tree-comment-cell {
+  padding-left: 32px;
 }
 
 .tree-comment {
   color: var(--color-blockquote-text);
   font-style: italic;
+  white-space: nowrap;
 }
 
 /* Frontmatter container */
@@ -733,11 +732,18 @@ html, body {
   margin: 0;
   padding: 0;
   background-color: transparent;
+  overflow: visible;
+}
+
+.frontmatter-container .tree-table {
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 .frontmatter-container .tree-comment {
   font-style: normal;
   color: var(--color-fg);
+  white-space: normal;
 }
 
 /* Fallback for malformed YAML/JSON frontmatter that fails to parse */
