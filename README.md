@@ -1,3 +1,5 @@
+![Markdown Viewer](icons/icon128.png)
+
 # Markdown Viewer
 
 An unobtrusive Chrome extension that renders Markdown files in the browser.
