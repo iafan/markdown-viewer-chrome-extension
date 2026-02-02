@@ -3,7 +3,7 @@
   "name": "Markdown Viewer",
   "version": "1.0.0",
   "description": "Renders Markdown files beautifully in your browser",
-  "permissions": ["contextMenus", "activeTab", "scripting", "storage"],
+  "permissions": ["contextMenus", "storage"],
   "background": {
     "service_worker": "src/background.ts",
     "type": "module"
