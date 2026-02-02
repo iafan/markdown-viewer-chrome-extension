@@ -4,6 +4,8 @@
 
 An unobtrusive Chrome extension that renders Markdown files in the browser.
 
+![Preview](example/preview.png)
+
 ## Features
 
 - Auto-renders `.md` and `.markdown` files
