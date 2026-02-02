@@ -11,9 +11,10 @@ An unobtrusive Chrome extension that renders Markdown files in the browser.
 - Auto-renders `.md` and `.markdown` files
 - Syntax highlighting for code blocks
 - Light/dark theme with auto-detection
+- YAML and JSON frontmatter rendering
 - Mermaid flowchart rendering (sort of — this is still experimental)
 - ASCII tree structure rendering (this is what I was missing everywhere else!)
-- Toggle prettifying on/off va context menu 
+- Toggle prettifying on/off via context menu 
 
 ## Installation
 

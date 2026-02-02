@@ -3,11 +3,12 @@ import { markedHighlight } from 'marked-highlight'
 import hljs from 'highlight.js'
 import { mermaidExtension, renderMermaidDiagrams } from 'marked-mermaid-flowchart'
 import { treeExtension, renderTreeBlocks } from 'marked-tree-to-html'
+import { frontmatterExtension, renderFrontmatterBlocks } from 'marked-frontmatter'
 import styles from './styles.css?inline'
 
-// Configure marked with mermaid and tree support
-// Order matters: these must be registered before highlight
-marked.use({ extensions: [mermaidExtension, treeExtension] })
+// Configure marked with frontmatter, mermaid, and tree support
+// Order matters: frontmatter must be first, then other extensions before highlight
+marked.use({ extensions: [frontmatterExtension, mermaidExtension, treeExtension] })
 
 marked.use(markedHighlight({
   langPrefix: 'hljs language-',
@@ -133,7 +134,8 @@ async function prettifyMarkdown(): Promise<void> {
     storageSet('local', { theme: newTheme })
   })
 
-  // Render any mermaid diagrams and tree structures
+  // Render frontmatter, mermaid diagrams, and tree structures
+  renderFrontmatterBlocks()
   await renderMermaidDiagrams()
   renderTreeBlocks()
 
