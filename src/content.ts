@@ -6,9 +6,32 @@ import { treeExtension, renderTreeBlocks } from 'marked-tree-to-html'
 import { frontmatterExtension, renderFrontmatterBlocks } from 'marked-frontmatter'
 import styles from './styles.css?inline'
 
+// Convert heading text to URL-friendly anchor ID
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/<[^>]*>/g, '')    // Remove HTML tags
+    .replace(/[^\w\s-]/g, '')   // Remove special characters
+    .replace(/\s+/g, '-')       // Replace spaces with hyphens
+    .replace(/-+/g, '-')        // Collapse multiple hyphens
+    .replace(/^-|-$/g, '')      // Trim hyphens from ends
+}
+
 // Configure marked with frontmatter, mermaid, and tree support
 // Order matters: frontmatter must be first, then other extensions before highlight
 marked.use({ extensions: [frontmatterExtension, mermaidExtension, treeExtension] })
+
+// Custom heading renderer to add anchor IDs
+marked.use({
+  renderer: {
+    heading({ tokens, depth }) {
+      const text = this.parser.parseInline(tokens)
+      const slug = slugify(text)
+      return `<h${depth} id="${slug}">${text}</h${depth}>\n`
+    }
+  }
+})
 
 marked.use(markedHighlight({
   langPrefix: 'hljs language-',
@@ -46,8 +69,8 @@ async function storageRemove(storageType: 'local' | 'session', keys: string | st
 }
 
 function isMarkdownFile(): boolean {
-  const url = window.location.href.toLowerCase()
-  return url.endsWith('.md') || url.endsWith('.markdown')
+  const pathname = window.location.pathname.toLowerCase()
+  return pathname.endsWith('.md') || pathname.endsWith('.markdown')
 }
 
 function isRawTextPage(): boolean {
