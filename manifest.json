@@ -11,6 +11,7 @@
   "content_scripts": [
     {
       "matches": ["*://*/*.md", "*://*/*.markdown", "file://*/*.md", "file://*/*.markdown"],
+      "css": ["hide.css"],
       "js": ["src/content.ts"],
       "run_at": "document_end"
     }

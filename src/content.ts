@@ -68,9 +68,8 @@ async function storageRemove(storageType: 'local' | 'session', keys: string | st
   await chrome.runtime.sendMessage({ action: 'storage-remove', storageType, keys })
 }
 
-function isMarkdownFile(): boolean {
-  const pathname = window.location.pathname.toLowerCase()
-  return pathname.endsWith('.md') || pathname.endsWith('.markdown')
+function showPage(): void {
+  document.body.style.visibility = 'visible'
 }
 
 function isRawTextPage(): boolean {
@@ -162,6 +161,7 @@ async function prettifyMarkdown(): Promise<void> {
   await renderMermaidDiagrams()
   renderTreeBlocks()
 
+  showPage()
   isPrettified = true
   storageRemove('session', VIEW_PREF_KEY)
   chrome.runtime.sendMessage({ action: 'set-prettified' })
@@ -171,6 +171,7 @@ function showRawMarkdown(): void {
   if (!isPrettified || !originalHTML) return
 
   document.documentElement.innerHTML = originalHTML
+  showPage()
   isPrettified = false
   storageSet('session', { [VIEW_PREF_KEY]: true })
   chrome.runtime.sendMessage({ action: 'set-raw' })
@@ -178,13 +179,19 @@ function showRawMarkdown(): void {
 
 // Auto-prettify markdown files on load (unless user prefers raw for this tab)
 async function init(): Promise<void> {
-  if (isMarkdownFile() && isRawTextPage()) {
-    const storage = await storageGet('session', VIEW_PREF_KEY)
-    const prefersRaw = storage[VIEW_PREF_KEY] === true
-    if (!prefersRaw) {
-      prettifyMarkdown()
-    }
+  if (!isRawTextPage()) {
+    showPage()
+    return
   }
+
+  const storage = await storageGet('session', VIEW_PREF_KEY)
+  const prefersRaw = storage[VIEW_PREF_KEY] === true
+  if (prefersRaw) {
+    showPage()
+    return
+  }
+
+  prettifyMarkdown()
 }
 
 init()
